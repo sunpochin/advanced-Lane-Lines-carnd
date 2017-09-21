@@ -37,14 +37,10 @@ The goals / steps of this project are the following:
 
 [image20]: ./writeup/warped-6.png "warped-6.png"
 
+[image21]: ./writeup/fitlane-1-with-good-thresholding.png "fitlane-1-with-good-thresholding.png"
 
+[image23]: ./writeup/using-larger-warped-src-dst-minor-error.png "using-larger-warped-src-dst-minor-error.png"
 
-[image1]: ./examples/undistort_output.png "Undistorted"
-[image2]: ./test_images/test1.jpg "Road Transformed"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
 [video1]: ./project_video.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
@@ -136,26 +132,28 @@ I verified that my perspective transform was working as expected by drawing the 
 ![alt text][image20]
 
 
-####
-#### TODO separator
-####
-
-
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+In the function `def fitlanes():` in the 8th code cell of the same notebook, I implemented the "sliding window" method introduced in the course video, which find the points in the warped image, and fit them with 2nd order polynomial using `np.polyfit(lefty, leftx, 2)`.
+The result image is like this:
 
-![alt text][image5]
+![alt text][image21]
+
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+In the function `drawfit():` of the same notebook I calculated the radius of curvature of the lane and the position of the vehicle with respect to center. 
+They are calculated by converting pixels to meters using an estimation of 30 meters / 720 pixels in y , and 3.7 meters(standard width of US lanes) / 700 pixels in x.
+```
+    ym_per_pix = 30./720 # meters per pixel in y dimension
+    xm_per_pix = 3.7/700 # meters per pixel in x dimension
+```
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+I implemented this step in the function `def drawwarpback():`.  Here is an example of my result on `test-5.jpg`:
 
-![alt text][image6]
+![alt text][image23]
 
 ---
 
@@ -163,7 +161,7 @@ I implemented this step in lines # through # in my code in `yet_another_file.py`
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](https://youtu.be/W2Ztc__laOw)
 
 ---
 
@@ -171,4 +169,8 @@ Here's a [link to my video result](./project_video.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+In my first few implementations my pipeline failed and 2 sections of lane with sunshine, and the detected lane curvature sometimes doesn't fit with real lanes. After I experimented with different thresholding combinations the problem was solved.
+
+I tried to use the codes of edge detection and Hough transform from project 1 to help but failed.
+
+I would like to try the challenge videos if I have more time.
