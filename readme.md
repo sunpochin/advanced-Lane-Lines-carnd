@@ -17,13 +17,24 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-
-
 [image11]: ./writeup/original-distorted-calibration5.png "original-distorted-calibration5.png"
 [image12]: ./writeup/undistorted-calibration5.png "undistorted-calibration5.png"
 
+[//]: # (undistorted)
+
 [image13]: ./writeup/original-distorted-test5.png "original-distorted-test5.png"
 [image14]: ./writeup/undistorted-test5.png "undistorted-test5.png"
+
+[//]: # (image for thresholding)
+
+[image15]: ./writeup/sunny-2-example-thresholding.png "sunny-2-example-thresholding.png"
+[image16]: ./writeup/sunny-2-fit-example-thresholding.png "sunny-2-fit-example-thresholding.png"
+
+[image17]: ./writeup/sunny-4-with-good-thresholding.png "sunny-4-with-good-thresholding.png"
+[image18]: ./writeup/sunny-4-fit-with-good-thresholding.png "sunny-4-fit-with-good-thresholding.png"
+
+[image19]: ./writeup/sunny-4-warped-with-good-thresholding.png "sunny-4-warped-with-good-thresholding.png"
+
 
 
 
@@ -71,22 +82,25 @@ To demonstrate this step, I apply the distortion correction to one of the test i
 ![alt text][image13]
 ![alt text][image14]
 
-We can the effect of undistortion is much harder to see than on the chessboard, these two pictures need to be viewer in a image viewer or consecutive web browser tabs to see the difference of lanes.
+We can see the effect of undistortion is much harder to see than on the chessboard, these two pictures need to be viewer in a image viewer or consecutive web browser tabs to see the difference of lanes.
 
+
+#### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
+
+I started with the example code of course video, which combining 
+Sobel X gradient and S channel of HSL color space. The result thresholded image is not good if the lane has sunshine on it. 
+(project video 22~26 and 39~43 seconds )
+![alt text][image15]
+
+Then I tried with different combinations of thresholding with channels RGB HSL HSV color space, and I found that the combination of R, G channel of RGB and L channel of HSL worked for the sunny lane.
+![alt text][image17]
+
+The function is `def thresholding(img):` in cell 6 of the same notebook.
 
 ####
 #### TODO separator
 ####
 
-
-
-
-
-#### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
-
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
-
-![alt text][image3]
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
