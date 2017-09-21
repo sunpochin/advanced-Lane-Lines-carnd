@@ -86,10 +86,11 @@ We can see the effect of undistortion is much harder to see than on the chessboa
 
 I started with the example code of course video, which combining
 Sobel X gradient and S channel of HSL color space. The result thresholded image is not good if the lane has sunshine on it.
-(project video 22~26 and 39~43 seconds )
+(in project video 22 and 39 seconds )
 ![alt text][image15]
 
 Then I tried with different combinations of thresholding with channels RGB HSL HSV color space, and I found that the combination of R, G channel of RGB and L channel of HSL worked for the sunny lane.
+
 ![alt text][image17]
 
 The function is `def thresholding(img):` in cell 6 of the same notebook `pipeline.ipynb`.
