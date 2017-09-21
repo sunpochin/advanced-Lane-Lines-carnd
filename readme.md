@@ -35,6 +35,7 @@ The goals / steps of this project are the following:
 
 [image19]: ./writeup/sunny-4-warped-with-good-thresholding.png "sunny-4-warped-with-good-thresholding.png"
 
+[image20]: ./writeup/warped-6.png "warped-6.png"
 
 
 
@@ -62,7 +63,7 @@ You're reading it!
 
 #### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
 
-The code for this step is contained in the first code cell of the IPython notebook located in "./pipeline.ipynb" .  
+The code for this step is contained in the first code cell of the IPython notebook located in jupyter notebook `pipeline.ipynb` .
 
 I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.  
 
@@ -87,50 +88,58 @@ We can see the effect of undistortion is much harder to see than on the chessboa
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I started with the example code of course video, which combining 
-Sobel X gradient and S channel of HSL color space. The result thresholded image is not good if the lane has sunshine on it. 
+I started with the example code of course video, which combining
+Sobel X gradient and S channel of HSL color space. The result thresholded image is not good if the lane has sunshine on it.
 (project video 22~26 and 39~43 seconds )
 ![alt text][image15]
 
 Then I tried with different combinations of thresholding with channels RGB HSL HSV color space, and I found that the combination of R, G channel of RGB and L channel of HSL worked for the sunny lane.
 ![alt text][image17]
 
-The function is `def thresholding(img):` in cell 6 of the same notebook.
-
-####
-#### TODO separator
-####
+The function is `def thresholding(img):` in cell 6 of the same notebook `pipeline.ipynb`.
 
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform includes a function called `warp_image()`, which appears in cell 7 in the IPython notebook `pipeline.ipynb`.  The `warp_image()` function takes as inputs an image (`colorgrad`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+The code for my perspective transform includes a function called `warp_image()`, which appears in cell 7 in the same notebook `pipeline.ipynb`.  The `warp_image()` function takes as inputs an image (`colorgrad`), as well as source (`src`) and destination (`dst`) points, and transform the image into a "birds-eye view" image.
+
+I tried to think of a way to automatically decide the `src` points but failed, so I experimented with different hardcoded `src` and `dst` and plot them with `cv2.polylines` to help myself get a better `src` fitting the lane.
+
+The hardcode the source and destination points are as following:
 
 ```python
-src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
-dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
+top_left = [570, 470]
+top_right = [720, 470]
+bottom_right = [1130, 720]
+bottom_left = [200, 720]
+src = np.array([bottom_left, bottom_right, top_right, top_left])
+
+top_left_dst = [320, 0]
+top_right_dst = [980, 0]
+bottom_right_dst = [980, 720]
+bottom_left_dst = [320, 720]
+dst = np.array([bottom_left_dst, bottom_right_dst, top_right_dst, top_left_dst])
+
 ```
 
 This resulted in the following source and destination points:
 
 | Source        | Destination   |
 |:-------------:|:-------------:|
-| 630, 420      | 200, 0        |
-| 650, 420      | 1130, 0      |
-| 1130, 720     | 1130, 720      |
-| 200, 720      | 200, 720        |
+| 570, 470      | 320, 0        |
+| 720, 470      | 980, 0      |
+| 1130, 720     | 980, 720      |
+| 200, 720      | 320, 720        |
 
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
-![alt text][image4]
+![alt text][image20]
+
+
+####
+#### TODO separator
+####
+
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
