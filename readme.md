@@ -159,6 +159,7 @@ The car position in x axis and its offset to lane center can be calculated:
 As the width of the lane is about 3.7 meter and center of the lane would be 3.7/2=1.85 approximately.
 For most of the time, value of car position with respect to center is in range (-0.5, 0.5), for the car being driving inside the lanes.
 
+A test image showing the car has a slightly larger than 0.5m offset to the lane center:
 ![alt text][image24]
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
