@@ -41,7 +41,8 @@ The goals / steps of this project are the following:
 
 [image23]: ./writeup/using-larger-warped-src-dst-minor-error.png "using-larger-warped-src-dst-minor-error.png"
 
-[video1]: ./project_video.mp4 "Video"
+[image24]: ./writeup/car-pos-1-more-than-50.png "car-pos-1-more-than-50.png"
+
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
@@ -149,6 +150,16 @@ They are calculated by converting pixels to meters using an estimation of 30 met
     ym_per_pix = 30./720 # meters per pixel in y dimension
     xm_per_pix = 3.7/700 # meters per pixel in x dimension
 ```
+The car position in x axis and its offset to lane center can be calculated:
+```
+    car_pos = binary_warped.shape[1] / 2
+    lane_center = (left_fitx[-1] + right_fitx[-1]) / 2
+    offset_in_meter = (lane_center - car_pos) * xm_per_pix
+```
+As the width of the lane is about 3.7 meter and center of the lane would be 3.7/2=1.85 approximately.
+For most of the time, value of car position with respect to center is in range (-0.5, 0.5), for the car being driving inside the lanes.
+
+![alt text][image24]
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
@@ -162,7 +173,7 @@ I implemented this step in the function `def drawwarpback():`.  Here is an examp
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](https://youtu.be/W2Ztc__laOw)
+Here's a [link to my video result](https://youtu.be/yLvDMEEpka4)
 
 ---
 
